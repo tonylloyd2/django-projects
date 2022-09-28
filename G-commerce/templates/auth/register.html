@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="breadcrumb-area pt-35 pb-35 bg-gray-3">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="active">Register </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="login-register-area pt-100 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                <div class="login-register-wrapper">
+                    <div class="login-register-tab-list nav">
+                        <a href="{% url 'login' %}">
+                            <h4> login </h4>
+                        </a>
+                        <a class="active" href="">
+                            <h4> register </h4>
+                        </a>
+                    </div>
+                    <div id="lg1" class="tabcontent">
+                        <div class="tabpane">
+                            <div class="login-form-container">
+                                <div class="login-register-form">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        {{form}}
+                                        <div class="button-box">
+                                            <button type="submit"><span>Register</span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

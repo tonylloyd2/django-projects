@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load custom_tags %}
+
+<div class="slider-area">
+    <div class="slider-active owl-carousel nav-style-1">
+        {% for product in products %}
+            <div class="slider-height-7 bg-glaucous d-flex align-items-center">
+                <div class="container">
+                    <div class="row align-items-center slider-h9-mrg">
+                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
+                            <div class="slider-content-7 slider-animated-1">
+                                <h3 class="animated">New Arrival</h3>
+                                <h1 class="animated">New Design <br>Tecno Smartphones</h1>
+                                <div class="slider-btn-9 btn-hover">
+                                    <a class="animated" href="shop.html">SHOP NOW</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-12 col-sm-5">
+                            <div class="slider-singleimg-hm9 slider-animated-1">
+                                <img class="animated img-fluid" src="/media/{{product.product_image}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="collections-area pb-95">
+    <div class="container">
+        <div class="collection-wrap-2">
+            <div class="collection-active-2 owl-carousel">
+                {% for product in products %}
+                <div class="collection-product-2 p-5">
+                    <a href="#"><img src="/media/{{product.product_image}}" class="img-fluid" alt=""></a>
+                    <div class="collection-content-2 text-center">
+                        <!-- <span>4 Products</span> -->
+                        <h4><a class="text-dark p-1 rounded" style="background-color: white;" href="#">{{product.product_name}}</a></h4>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="brand-logo-area pt-100 pb-95">
+    <div class="container">
+        <div class="brand-logo-active owl-carousel">
+            <div class="single-brand-logo">
+                <img src="{% static 'img/brand-logo/barnd-logo-1.png' %}" alt="">
+            </div>
+            <div class="single-brand-logo">
+                <img src="{% static 'img/brand-logo/barnd-logo-2.png' %}" alt="">
+            </div>
+            <div class="single-brand-logo">
+                <img src="{% static 'img/brand-logo/barnd-logo-3.png' %}" alt="">
+            </div>
+            <div class="single-brand-logo">
+                <img src="{% static 'img/brand-logo/barnd-logo-4.png' %}" alt="">
+            </div>
+            <div class="single-brand-logo">
+                <img src="{% static 'img/brand-logo/barnd-logo-5.png"' %} alt="">
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="slider-area mt-35">
+    <div class="slider-active owl-carousel nav-style-1">
+        <div class="single-slider single-slider-10 slider-height-8 bg-aqua">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6 d-flex align-items-center">
+                        <div class="slider-content slider-content-10 slider-animated-2">
+                            <h3 class="animated">Smart Products</h3>
+                            <h1 class="animated">Summer Offer <br> {% now "Y" %} Collection</h1>
+                            <div class="slider-btn btn-hover">
+                                <a class="animated" href="{% url 'shop' %}">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6">
+                        <div class="slider-singleimg-hm10 slider-animated-2 ml-40 mr-40">
+                            <img class="animated" src="{% static 'img/product/camon191.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single-slider single-slider-10 slider-height-8 bg-aqua">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6 d-flex align-items-center">
+                        <div class="slider-content slider-content-10 slider-animated-2">
+                            <h3 class="animated">Smart Products</h3>
+                            <h1 class="animated">Summer Offer <br>{% now "Y" %} Collection</h1>
+                            <div class="slider-btn btn-hover">
+                                <a class="animated" href="{% url 'shop' %}">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6">
+                        <div class="slider-singleimg-hm10 slider-animated-2 ml-40 mr-40">
+                            <img class="animated" src="{% static 'img/product/camon192.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="suppoer-area pt-100 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="support-wrap mb-30 support-1">
+                    <div class="support-icon">
+                        <img class="animated" src="{% static 'img/icon-img/support-1.png' %}" alt="">
+                    </div>
+                    <div class="support-content">
+                        <h5>Free Shipping</h5>
+                        <p>Free shipping on all order</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="support-wrap mb-30 support-2">
+                    <div class="support-icon">
+                        <img class="animated" src="{% static 'img/icon-img/support-2.png' %}" alt="">
+                    </div>
+                    <div class="support-content">
+                        <h5>Support 24/7</h5>
+                        <p>Free shipping on all order</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="support-wrap mb-30 support-3">
+                    <div class="support-icon">
+                        <img class="animated" src="{% static 'img/icon-img/support-3.png' %}" alt="">
+                    </div>
+                    <div class="support-content">
+                        <h5>Money Return</h5>
+                        <p>Free shipping on all order</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="support-wrap mb-30 support-4">
+                    <div class="support-icon">
+                        <img class="animated" src="{% static 'img/icon-img/support-4.png' %}" alt="">
+                    </div>
+                    <div class="support-content">
+                        <h5>Order Discount</h5>
+                        <p>Free shipping on all order</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="funfact-area pt-35 pb-115 bg-purple mt-3">
+    <div class="section-title mt-115 text-center">
+        <h2>FLASH SALE!</h2>
+    </div>
+    <div class="container pt-35">
+        <div class="row">
+            <div class="col-lg-4">
+                <img src="{% static 'img/product/camon192.jpg' %}" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 ml-auto">
+                <div class="funfact-content text-center">
+                    <h2>Deal of the day</h2>
+                    <div class="timer">
+                        <div data-countdown='{{ 1|addDays|date:"Y/m/d" }}'></div>
+                    </div>
+                    <div class="funfact-btn btn-hover">
+                        <a href="{% url 'shop' %}">SHOP NOW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="product-area mt-3 pt-35 pb-60">
+    <div class="container">
+        <div class="section-title mb-35 text-center">
+            <h2>DAILY DEALS!</h2>
+        </div>
+        
+        <div class="tab-content jump">
+            <div class="tab-pane active" id="product-1">
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6">
+                            <div class="product-wrap mb-25 scroll-zoom">
+                                <div class="product-img">
+                                    <a href="{% url 'ProductDetails' product.product_id product.product_name %}">
+                                        {% for image in ProductImages %}
+                                            {% if product.product_id == image.product_id%}
+                                                {% if image.index == 1 %}
+                                                    <img class="default-img" src="media/{{ image.image }}" alt="">
+                                                {% elif image.index == 2 %}
+                                                    <img class="hover-img" src="media/{{ image.image }}" alt="">
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </a>
+                                    <span class="pink">-10%</span>
+                                    <div class="product-action">
+                                        <div class="pro-same-action pro-wishlist">
+                                            <a title="Wishlist" onclick="AddWishList('{{product.product_id}}')"><i class="pe-7s-like"></i></a>
+                                        </div>
+                                        <div class="pro-same-action pro-cart">
+                                            <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
+                                        </div>
+                                        <div class="pro-same-action pro-quickview">
+                                            <a title="Quick View" href="#" data-toggle="modal" data-target="#exampleModal"><i class="pe-7s-look"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-content text-center">
+                                    <h3><a href="{% url 'ProductDetails' product.product_id product.product_name %}">Phones and Accesories</a></h3>
+                                    <h5>{{product.product_name}}</h5>
+                                    <div class="product-rating">
+                                        <i class="fa fa-star-o yellow"></i>
+                                        <i class="fa fa-star-o yellow"></i>
+                                        <i class="fa fa-star-o yellow"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <div class="product-price">
+                                        <span>Ksh.{{product.product_price}}</span>
+                                        <span class="old">Ksh.{{product.old_price}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+<script>
+    function AddWishList(product_id){
+    let formData = new FormData();
+    formData.append('product_id',product_id)
+    formData.append('no_items',1)
+    formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+        axios.post(
+            "{% url 'AddWishList' %}",formData
+        ).then(response => {
+            alert("Product added to wishlist")
+        })
+    }
+</script>
+{% endblock %}

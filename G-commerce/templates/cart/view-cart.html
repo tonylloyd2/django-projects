@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="breadcrumb-area pt-35 pb-35 bg-gray-3">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="active">View Cart</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="cart-main-area pt-90 pb-100">
+    <div class="container">
+        <h3 class="cart-page-title">Your cart items</h3>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <form action="#">
+                    <div class="table-content table-responsive cart-table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Until Price</th>
+                                    <th>Qty</th>
+                                    <th>Subtotal</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if CartIsEmpty %}
+                                    <tr>
+                                        <td colspan="6">Your cart is empty</td>
+                                    </tr>
+                                {% else %}
+                                {% for item in cart %}
+                                    <tr>
+                                        <td class="product-thumbnail">
+                                            <a href="#"><img src="/media/{{item.cproduct_image}}" class="img-fluid" alt=""></a>
+                                        </td>
+                                        <td class="product-name"><a href="#">{{item.cproduct_name}}</a></td>
+                                        <td class="product-price-cart"><span class="amount">Ksh.{{item.cproduct_price}}</span></td>
+                                        <td class="product-quantity">
+                                            <div class="btn-group">
+                                                <button type="button" onclick="reduceProduct('{{item.cproduct_id}}')"  style="box-shadow:none ;" class="btn  btn-secondary">-</button>
+                                                <button disabled id="{{item.cproduct_id}}" value="{{item.no_items}}" class="btn">{{item.no_items}}</button>
+                                                <button type="button" onclick="addProduct('{{item.cproduct_id}}')" style="box-shadow:none;" class="btn  btn-secondary">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="product-subtotal" id="SubTotal{{item.cproduct_id}}">Ksh.{{item.ctotal_price}}</td>
+                                        <td class="product-remove">
+                                            <a onclick="deleteProduct('{{item.cproduct_id}}')"><i class="fa fa-times"></i></a>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="cart-shiping-update-wrapper">
+                                <div class="cart-shiping-update">
+                                    <a href="{% url 'shop' %}">Continue Shopping</a>
+                                </div>
+                                <div class="cart-clear">
+                                    <a href="" id="clearCartButton">Clear Shopping Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cart-tax">
+                            <div class="title-wrap">
+                                <h4 class="cart-bottom-title section-bg-gray">PickUp Station</h4>
+                            </div>
+                            <div class="tax-wrapper">
+                                <p>Choose a pickup station or your default pickup station will be used</p>
+                                <div class="tax-select-wrapper">
+                                    <div class="tax-select">
+                                        <label>
+                                            * County
+                                        </label>
+                                        <select name="county" id="county" class="email s-email s-wid">
+                                            <option>Nairobi</option>
+                                            <option>Trans Nzoia</option>
+                                            <option>Mombasa</option>
+                                            <option>Nakuru</option>
+                                            <option>Bungoma</option>
+                                        </select>
+                                    </div>
+                                    <div class="tax-select">
+                                        <label>
+                                            * City / Town
+                                        </label>
+                                        <select id="city" name="city" class="email s-email s-wid">
+                                            <option>Nairobi</option>
+                                            <option>Kitale</option>
+                                            <option>Mombasa</option>
+                                            <option selected="selected">Nakuru</option>
+                                            <option>Bungoma</option>
+                                        </select>
+                                    </div>
+                                    <div class="tax-select">
+                                        <label>
+                                            * Pickup Station
+                                        </label>
+                                        <input id="pickup_station" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="discount-code-wrapper">
+                            <div class="title-wrap">
+                               <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4> 
+                            </div>
+                            <div class="discount-code">
+                                <p>Enter your coupon code if you have one.</p>
+                                <form>
+                                    <input type="text" required="" name="name">
+                                    <button class="cart-btn-2" type="submit">Apply Coupon</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="grand-totall">
+                            <div class="title-wrap">
+                                <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
+                                <input type="text" hidden id="CartTotal" value="{{CartTotal}}">
+                            </div>
+                            <h5>Total products <span id="CartTotalSpan">Ksh.{{CartTotal}}</span></h5>
+                            <div class="total-shipping">
+                                <h5>Total shipping</h5>
+                                <ul>
+                                    {% for shipping in shipping %}
+                                    <li><input id="{{shipping.shipping_type}}Shipping" name="ShippingType" value="{{shipping.shipping_fee}}" type="checkbox"> <b class="text-capitalize">{{shipping.shipping_type}}</b>  <span>Ksh.{{shipping.shipping_fee}}</span></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <h4 class="grand-totall-title">Grand Total <span id="GrandTotal">Ksh.{{CartTotal}}</span></h4>
+                            {% if not CartIsEmpty %}<a href="{% url 'checkout' %}">Proceed to Checkout</a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    if(document.readyState){
+        var cart_total = document.getElementById("CartTotal")
+        var cart_total_span = document.getElementById("CartTotalSpan")
+        var grand_total = document.getElementById("GrandTotal")
+        let standard_shipping = document.getElementById("standardShipping")
+        let express_shipping = document.getElementById("expressShipping")
+        let clear_cart_button = document.getElementById("clearCartButton")
+
+        if('{{cshipping}}' === "standard"){
+            express_shipping.checked = false
+            standard_shipping.checked = true
+            grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(standard_shipping.value))
+        }
+        else if('{{cshipping}}' === "express"){
+            standard_shipping.checked = false
+            express_shipping.checked = true
+            grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(express_shipping.value))
+        }
+        else{
+            express_shipping.checked = false
+            standard_shipping.checked = true
+            grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(standard_shipping.value))
+        }
+        
+        standard_shipping.addEventListener('click',function(event){
+            express_shipping.checked = false
+            standard_shipping.checked = true
+            if(cart_total.value > 0){
+                grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(standard_shipping.value))
+            }
+
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+            formData.append('shipping','standard')
+
+            axios.post("{% url 'ChangeShipping'%}",formData,)
+        })
+
+        express_shipping.addEventListener('click',function(event){
+            standard_shipping.checked = false
+            express_shipping.checked = true
+            if(cart_total.value > 0){
+                grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(express_shipping.value))
+            }
+
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+            formData.append('shipping','express')
+
+            axios.post("{% url 'ChangeShipping'%}",formData,)
+        })
+
+        clear_cart_button.addEventListener('click',function(event){
+            event.preventDefault();
+        })
+
+        function addProduct(product_id){
+            var item_update = document.getElementById(product_id)
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+            formData.append('product_id',product_id)
+
+            if(parseInt(item_update.value) < 3){
+                axios.post("{% url 'AddCart' %}",formData,)
+                .then(response=>{
+                    item_update.innerText = response.data['no_items']
+                    item_update.value = response.data['no_items']
+                    cart_total.value = response.data['cart_total']
+                    cart_total_span.innerHTML = `Ksh. ${response.data['cart_total']}`
+                    document.getElementById("SubTotal"+product_id).innerHTML = `Ksh. ${response.data['sub_total']}`
+                    if(standard_shipping.checked){
+                        grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(standard_shipping.value))
+                    }
+                    else if(express_shipping.checked){
+                        grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(express_shipping.value))
+                    }
+                })
+            }
+        }
+
+        function reduceProduct(product_id){
+            var item_update = document.getElementById(product_id)
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+            formData.append('product_id',product_id)
+            
+            if(parseInt(item_update.value) > 1){
+                axios.post("{% url 'ReduceCart' %}",formData,)
+                .then(response=>{
+                    item_update.innerText = response.data['no_items']
+                    item_update.value = response.data['no_items']
+                    cart_total.value = response.data['cart_total']
+                    cart_total_span.innerHTML = "Ksh."+ (response.data['cart_total'])
+                    document.getElementById("SubTotal"+product_id).innerHTML = `Ksh. ${response.data['sub_total']}`
+                    if(standard_shipping.checked){
+                        grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(standard_shipping.value))
+                    }
+                    else if(express_shipping.checked){
+                        grand_total.innerHTML = "Ksh."+ (parseInt(cart_total.value) + parseInt(express_shipping.value))
+                    }
+                })
+            }
+        }
+
+        function deleteProduct(product_id){
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+            formData.append('product_id',product_id)
+            axios.post("{% url 'DeleteCartProduct' %}",formData,)
+            .then(response =>{
+                window.location.reload()
+            })
+        }
+    }
+</script>
+{% endblock %}

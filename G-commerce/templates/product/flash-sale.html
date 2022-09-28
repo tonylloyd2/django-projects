@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="breadcrumb-area pt-35 pb-35 bg-gray-3">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="active">Flash Sale</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="shop-area pt-100 pb-100">
+    <div class="container">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6">
+                    <div class="product-wrap mb-25 scroll-zoom">
+                        <div class="product-img">
+                            <a href="{% url 'ProductDetails' product.product_id product.product_name %}">
+                                {% for image in ProductImages %}
+                                    {% if product.product_id == image.product_id%}
+                                        {% if image.index == 1 %}
+                                            <img class="default-img" src="/media/{{ image.image }}" alt="">
+                                        {% elif image.index == 2 %}
+                                            <img class="hover-img" src="/media/{{ image.image }}" alt="">
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </a>
+                            <span class="pink">-10%</span>
+                            <div class="product-action">
+                                <div class="pro-same-action pro-wishlist">
+                                    <a title="Wishlist" href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                </div>
+                                <div class="pro-same-action pro-cart">
+                                    <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
+                                </div>
+                                <div class="pro-same-action pro-quickview">
+                                    <a title="Quick View" href="#" data-toggle="modal" data-target="#exampleModal"><i class="pe-7s-look"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-content text-center">
+                            <h3><a href="{% url 'ProductDetails' product.product_id product.product_name %}">Phones and Accesories</a></h3>
+                            <h5>{{product.product_name}}</h5>
+                            <div class="product-rating">
+                                <i class="fa fa-star-o yellow"></i>
+                                <i class="fa fa-star-o yellow"></i>
+                                <i class="fa fa-star-o yellow"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <div class="product-price">
+                                <span>Ksh.{{product.product_price}}</span>
+                                <span class="old">Ksh.{{product.product_price}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

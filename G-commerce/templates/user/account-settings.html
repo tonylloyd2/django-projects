@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="breadcrumb-area pt-35 pb-35 bg-gray-3">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="active">My Account </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="checkout-area pb-80 pt-100">
+    <div class="container">
+        <div class="row">
+            <div class="ml-auto mr-auto col-lg-9">
+                <div class="checkout-wrapper">
+                    <div id="faq" class="panel-group">
+                        <div class="panel panel-default single-my-account">
+                            <div class="panel-heading my-account-title">
+                                <h3 class="panel-title"><span>1 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-1">Edit your account information </a></h3>
+                            </div>
+                            <div id="my-account-1" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="myaccount-info-wrapper">
+                                        <div class="account-info-wrapper">
+                                            <h4>My Account Information</h4>
+                                            <h5>Your Personal Details</h5>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info">
+                                                    <label>First Name</label>
+                                                    <input type="text" readonly value={{user.first_name}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info">
+                                                    <label>Last Name</label>
+                                                    <input type="text" class="text-uppercase" readonly value={{user.last_name}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info">
+                                                    <label>Email Address</label>
+                                                    <input type="email" readonly value={{user.email}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info">
+                                                    <label>Username</label>
+                                                    <input type="text" readonly value={{user.username}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info">
+                                                    <label>Telephone</label>
+                                                    <input type="text" readonly value={{user.phone_number}}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="billing-back-btn">
+                                            <div class="billing-back">
+                                                <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                            </div>
+                                            <div class="billing-btn">
+                                                <button type="submit">Continue</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default single-my-account">
+                            <div class="panel-heading my-account-title">
+                                <h3 class="panel-title"><span>2 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-2">Change your password </a></h3>
+                            </div>
+                            <div id="my-account-2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form method="post" url="{% url 'AccountSettings' %}" id="PasswordUpdateForm" class="myaccount-info-wrapper">
+                                        {% csrf_token %}
+                                        <div class="account-info-wrapper">
+                                            <h4>Change Password</h4>
+                                        </div>
+                                        <div id="AlertDiv" class="col-lg-12 col-md-12 text-center alert hide">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info">
+                                                    <label>Current Password</label>
+                                                    <input id="current_password" type="password">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info">
+                                                    <label>New Password</label>
+                                                    <input id="new_password" type="password">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="billing-info">
+                                                    <label>Password Confirm</label>
+                                                    <input id="confirm_password" type="password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="billing-back-btn">
+                                            <div class="billing-back">
+                                                <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                            </div>
+                                            <div class="billing-btn">
+                                                <button type="submit">Continue</button>
+                                                <script>
+                                                    let form = document.getElementById("PasswordUpdateForm");
+                                                    form.addEventListener('submit',function(event){
+                                                        event.preventDefault()
+                                                        let alertDiv = document.getElementById("AlertDiv");
+
+                                                        var current_password = document.getElementById("current_password").value
+                                                        var new_password = document.getElementById("new_password").value
+                                                        var confirm_password = document.getElementById("confirm_password").value
+
+                                                        let formData = new FormData();
+                                                        formData.append('current_password',current_password);
+                                                        formData.append('new_password',new_password);
+                                                        formData.append('confirm_password',confirm_password);
+                                                        formData.append('csrfmiddlewaretoken','{{csrf_token}}');
+
+                                                        let url = form.getAttribute('url'); 
+
+                                                        axios.post(
+                                                            url,
+                                                            formData,
+                                                        )
+                                                        .then(response =>{
+                                                            Object.entries(response.data).map(([key,value])=>{
+                                                                alertDiv.innerHTML = `
+                                                                    <strong class="text-capitalize">${key}! </strong>
+                                                                    ${value}
+                                                                `;
+                                                                if(key==="error"){
+                                                                    alertDiv.classList.add('show',`alert-${key}`)
+                                                                }
+                                                                else if(key==="success"){
+                                                                    window.location.replace("{% url 'home' %}")
+                                                                }
+                                                            })
+                                                        })
+                                                    })
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default single-my-account">
+                            <div class="panel-heading my-account-title">
+                                <h3 class="panel-title"><span>3 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-3">Modify your Pickup address</a></h3>
+                            </div>
+                            <div id="my-account-3" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="myaccount-info-wrapper">
+                                        <div class="account-info-wrapper">
+                                            <h4>Pickup Station</h4>
+                                        </div>
+                                        <div class="entries-wrapper">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                                                    <div class="entries-info text-center p-5">
+                                                        {{user.pickup_station}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                                                    <div class="entries-edit-delete text-center">
+                                                        <a class="edit"  data-toggle="modal" data-target="#AddressEditModal" href="#">Edit</a>
+                                                        <div class="modal fade" id="AddressEditModal" role="dialog">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                                                                    </div>
+                                                                    <div class="modal-body p-5">
+                                                                        <form action="" method="get">
+                                                                            <textarea name="" id="" cols="30" rows="10">
+
+                                                                            </textarea>
+                                                                            <button type="submit" class="form-control btn btn-primary">edit</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <a href="#">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="billing-back-btn">
+                                            <div class="billing-back">
+                                                <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                            </div>
+                                            <div class="billing-btn">
+                                                <button type="submit">Continue</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endblock %}

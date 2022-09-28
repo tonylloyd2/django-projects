@@ -1,0 +1,308 @@
+{% load static %}
+<!Doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>donshop</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+    
+    <!-- CSS
+	============================================ -->
+   
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Icon Font CSS -->
+    <link rel="stylesheet" href="{% static 'css/icons.min.css' %}">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="{% static 'css/plugins.css' %}">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Modernizer JS -->
+    <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
+    <style>
+        .errorlist{
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div class="mb-30">
+<header class="header-area header-padding-1 header-res-padding clearfix">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-2 col-lg-2 col-md-6 col-4">
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        ONSHOP
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-8 col-lg-8 d-none d-lg-block">
+                <div class="main-menu">
+                    <nav>
+                        <ul>
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li><a href="#"> Products <i class="fa fa-angle-down"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="{% url 'NewArrival' %}">New arrival</a></li>
+                                    <li><a href="{% url 'FlashSale' %}">Flash sale</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'shop' %}">Shop</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'ViewCart' %}"> Cart <i class="fa fa-angle-down"></i> </a>
+                                <ul class="submenu">
+                                    <li class="mega-menu-title"><a href="{% url 'ViewCart' %}">view cart</a></li>
+                                    <li><a href="{% url 'ViewWishList' %}">view wishlist</a></li>
+                                </ul>
+                            </li>
+                                <li><a href="#"> Orders <i class="fa fa-angle-down"></i></a>
+                                    <ul class="submenu">
+                                        <li><a href="{% url 'ViewCart' %}">all orders</a></li>
+                                        <li><a href="checkout.html">active orders</a></li>
+                                        <li><a href="wishlist.htm">fulfilled orders</a></li>
+                                        <li><a href="{% url 'AccountSettings' %}">cancelled orders</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a href="#">Account<i class="fa fa-angle-down"></i></a>
+                                <ul class="submenu">
+                                    {% if user.is_authenticated %}
+                                        <li><a href="{% url 'AccountSettings' %}">account settings</a></li>
+                                        <li><a href="{% url 'logout' %}">logout</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'login' %}">login</a></li>
+                                        <li><a href="{% url 'register' %}">register </a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <li><a href="contact.html"> Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-6 col-8">
+                   <div class="header-right-wrap">
+                    <div class="same-style header-search">
+                        <a class="search-active" href="#"><i class="pe-7s-search"></i></a>
+                        <div class="search-content">
+                            <form action="#">
+                                <input type="text" placeholder="Search" />
+                                <button class="button-search"><i class="pe-7s-search"></i></button>
+                            </form>
+                        </div> 
+                    </div>
+                    <div class="same-style account-satting">
+                        <a class="account-satting-active" href="#"><i class="pe-7s-user-female"></i></a>
+                        <div class="account-dropdown">
+                            <ul>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'ViewWishList' %}">Wishlist  </a></li>
+                                    <li><a href="{% url 'AccountSettings' %}">my account</a></li>
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                    <li><a href="{% url 'register' %}">Register</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="same-style header-wishlist">
+                        <a href="{% url 'ViewWishList' %}"><i class="pe-7s-like"></i></a>
+                    </div>
+                    <div class="same-style cart-wrap">
+                        <button class="icon-cart">
+                            <i class="pe-7s-shopbag"></i>
+                            <span class="count-style">{{GlobalCart.Gcount}}</span>
+                        </button>
+                        <div class="shopping-cart-content">
+                            <ul>
+                                {% for item in GlobalCart.cart %}
+                                    <li class="single-shopping-cart">
+                                        <div class="shopping-cart-img">
+                                            <a href="#"><img alt="" width="100px" src="/media/{{item.Gproduct_image}}"></a>
+                                        </div>
+                                        <div class="shopping-cart-title">
+                                            <h4><a href="#">{{item.Gproduct_name}}</a></h4>
+                                            <h6>Qty: &nbsp;{{item.item_qty}}</h6>
+                                            <span>Ksh. &nbsp;{{item.Gproduct_price}}</span>
+                                        </div>
+                                        <div class="shopping-cart-delete">
+                                            <a onclick="GlobalDeleteCart('{{item.Gproduct_id}}')"><i class="fa fa-times-circle"></i></a>
+                                            <script>
+                                                function GlobalDeleteCart(product_id){
+                                                    let formData = new FormData();
+                                                    formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+                                                    formData.append('product_id',product_id)
+                                                    axios.post("{% url 'DeleteCartProduct' %}",formData,)
+                                                    .then(response =>{
+                                                        window.location.reload()
+                                                    })
+                                                }
+                                            </script>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="shopping-cart-total">
+                                <h4>Shipping : <span>Ksh.{{GlobalCart.shipping_fee}}</span></h4>
+                                <h4>Total : <span class="shop-total">Ksh.{{GlobalCart.grand_total}}</span></h4>
+                            </div>
+                            <div class="shopping-cart-btn btn-hover text-center">
+                                <a class="default-btn" href="{% url 'ViewCart' %}">view cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu-area">
+            <div class="mobile-menu">
+                <nav id="mobile-menu-active">
+                    <ul class="menu-overflow">
+                        <li><a href="{% url 'home' %}">HOME</a></li>
+                        <li><a href="">Products</a>
+                            <ul>
+                                <li><a href="{% url 'ViewCart' %}">New arrival</a></li>
+                                <li><a href="checkout.html">Flash sale</a></li>
+                            </ul>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'shop' %}">Shop</a></li>
+                            <li><a href="#">Cart</a>
+                                <ul>
+                                    <li class="mega-menu-title"><a href="{% url 'ViewCart' %}">view cart</a></li>
+                                    <li><a href="{% url 'ViewWishList' %}">view wishlist</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="blog.html">Orders</a>
+                                <ul>
+                                    <li><a href="{% url 'ViewCart' %}">all orders</a></li>
+                                    <li><a href="checkout.html">active orders</a></li>
+                                    <li><a href="{% url 'ViewWishList' %}">fulfilled orders</a></li>
+                                    <li><a href="{% url 'AccountSettings' %}">cancelled orders</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        <li><a href="blog.html">Account</a>
+                            <ul>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'AccountSettings' %}">account settings</a></li>
+                                    <li><a href="{% url 'logout' %}">logout</a></li>
+                                {% else %}
+                                <li><a href="{% url 'login' %}">login</a></li>
+                                <li><a href="{% url 'register' %}">register </a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+</div>
+{% block content %} {% endblock %}
+<footer class="footer-area bg-gray pt-100 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-md-4 col-sm-4">
+                <div class="copyright mb-30">
+                    <div class="footer-logo">
+                        <a href="{% url 'home' %}">
+                            <b><h3>Storm Whisper</h3></b>
+                        </a>
+                    </div>
+                    <p><!--©-->&COPY; {% now "Y" %} <a href="#">wandabi</a>.<br> All Rights Reserved</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4">
+                <div class="footer-widget mb-30 ml-30">
+                    <div class="footer-title">
+                        <h3>ABOUT US</h3>
+                    </div>
+                    <div class="footer-list">
+                        <ul>
+                            <li><a href="about.html">About us</a></li>
+                            <li><a href="#">Store location</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="#">Orders tracking</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4">
+                <div class="footer-widget mb-30 ml-50">
+                    <div class="footer-title">
+                        <h3>USEFUL LINKS</h3>
+                    </div>
+                    <div class="footer-list">
+                        <ul>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Support Policy</a></li>
+                            <li><a href="#">Size guide</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-6">
+                <div class="footer-widget mb-30 ml-75">
+                    <div class="footer-title">
+                        <h3>FOLLOW US</h3>
+                    </div>
+                    <div class="footer-list">
+                        <ul>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Youtube</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="footer-widget mb-30 ml-70">
+                    <div class="footer-title">
+                        <h3>SUBSCRIBE</h3>
+                    </div>
+                    <div class="subscribe-style">
+                        <p>Get E-mail updates about latest shop and special offers.</p>
+                        <div id="mc_embed_signup" class="subscribe-form">
+                            <form id="mc-embedded-subscribe-form" class="validate" novalidate="" target="_blank" name="mc-embedded-subscribe-form" method="post" action="http://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef">
+                                <div id="mc_embed_signup_scroll" class="mc-form">
+                                    <input class="email" type="email" required="" placeholder="Enter your email here.." name="EMAIL" value="">
+                                    <div class="mc-news" aria-hidden="true">
+                                        <input type="text" value="" tabindex="-1" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef">
+                                    </div>
+                                    <div class="clear">
+                                        <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="Subscribe">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/ajax-mail.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/axios.js' %}"></script>
+
+</body>
+
+</html>

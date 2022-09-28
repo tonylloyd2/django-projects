@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="breadcrumb-area pt-35 pb-35 bg-gray-3">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="active">Wishlist </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="cart-main-area pt-90 pb-100">
+    <div class="container">
+        <h3 class="cart-page-title">Your wish list</h3>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <form action="#">
+                    <div class="table-content table-responsive cart-table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Unit Price</th>
+                                    <th>Qty</th>
+                                    <th>Subtotal</th>
+                                    <th>Add To Cart</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in wishlist %}
+                                    <tr>
+                                        <td class="product-thumbnail">
+                                            <a href="#"><img src="/media/{{item.wproduct_image}}" class="img-fluid" alt=""></a>
+                                        </td>
+                                        <td class="product-name"><a href="#">{{item.wproduct_name}}</a></td>
+                                        <td class="product-price-cart"><span class="amount">Ksh.{{item.wproduct_price}}</span></td>
+                                        <td class="product-quantity">
+                                            <div class="btn-group">
+                                                <button type="button" onclick="reduceProduct('{{item.wproduct_id}}')"  style="box-shadow:none ;" class="btn  btn-secondary">-</button>
+                                                <button disabled id="{{item.wproduct_id}}" value="{{item.no_items}}" class="btn">{{item.no_items}}</button>
+                                                <button type="button" onclick="addProduct('{{item.wproduct_id}}')" style="box-shadow:none;" class="btn  btn-secondary">+</button>
+                                            </div>
+                                        </td>
+                                        <td id="SubTotal{{item.wproduct_id}}" class="product-subtotal">Ksh.{{item.sub_total}}</td>
+                                        <td class="product-wishlist-cart">
+                                            <a onclick="addToCart('{{item.wproduct_id}}')">add to cart</a>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function addProduct(product_id){
+        let formData = new FormData();
+        formData.append('product_id',product_id)
+        formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+        if(parseInt(document.getElementById(product_id).value) < 3){
+            axios.post(
+                "{% url 'AddWishList' %}",formData
+            ).then(response => {
+                document.getElementById(product_id).innerText = response.data['no_items']
+                document.getElementById(product_id).value = response.data['no_items']
+                document.getElementById('SubTotal'+product_id).innerText = `Ksh. ${response.data['sub_total']}`
+            })
+        }
+    }
+
+    function reduceProduct(product_id){
+        let formData = new FormData();
+        formData.append('product_id',product_id)
+        formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+        if(parseInt(document.getElementById(product_id).value) > 1){
+            axios.post(
+                "{% url 'ReduceWishList' %}",formData
+            ).then(response => {
+                document.getElementById(product_id).innerText = response.data['no_items']
+                document.getElementById(product_id).value = response.data['no_items']
+                document.getElementById('SubTotal'+product_id).innerText = `Ksh. ${response.data['sub_total']}`
+            })
+        }
+    }
+
+    function addToCart(product_id){
+        let formData = new FormData();
+        formData.append('product_id',product_id)
+        formData.append('no_items',parseInt(document.getElementById(product_id).value))
+        formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+        axios.post(
+            "{% url 'AddCart' %}",formData
+        ).then(response => {
+            alert("Item added to cart")
+        })
+    }
+</script>
+{% endblock %}
